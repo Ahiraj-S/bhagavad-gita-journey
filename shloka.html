@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ಶ್ಲೋಕ · Bhagavad Gita Journey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,420;9..144,560;9..144,650&family=Inter:wght@400;500;600&family=Noto+Sans+Kannada:wght@400;500;600&family=Noto+Serif+Kannada:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="bg-blobs"><span class="b1"></span><span class="b2"></span><span class="b3"></span></div>
+
+<div class="shell">
+
+  <header class="site-header glass">
+    <a class="icon-btn" href="index.html" aria-label="All chapters">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <a class="header-link" href="index.html" id="crumb"></a>
+    <span class="icon-btn" style="visibility:hidden"></span>
+  </header>
+
+  <div class="progress-row" id="progressRow"></div>
+
+  <div class="verse-top">
+    <span class="vnum" id="vnum"></span>
+    <div class="vtitles">
+      <h1 id="chapterEn"></h1>
+      <p class="kn-title" id="chapterKn"></p>
+    </div>
+    <span class="verse-ref glass" id="verseRef"></span>
+  </div>
+
+  <section class="chant-panel glass">
+    <p class="chant-label">ಪಠಣ · CHANT</p>
+    <p class="chant" id="chant"></p>
+  </section>
+
+  <nav class="tabs-bar glass">
+    <div class="tab-indicator" id="tabIndicator"></div>
+    <button class="tab-btn is-active" data-tab="meaning">Meaning<span class="kn">ಅರ್ಥ</span></button>
+    <button class="tab-btn" data-tab="story">Story<span class="kn">ಕಥೆ</span></button>
+    <button class="tab-btn" data-tab="lesson">Life Lesson<span class="kn">ಜೀವನ ಪಾಠ</span></button>
+  </nav>
+
+  <div class="tab-panels glass">
+
+    <div class="tab-panel is-active" data-panel="meaning">
+      <div class="meaning-grid">
+        <div class="meaning-col kn">
+          <p class="col-label">ಕನ್ನಡ</p>
+          <p id="meaningKn"></p>
+        </div>
+        <div class="meaning-col">
+          <p class="col-label">ENGLISH</p>
+          <p id="meaningEn"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" data-panel="story">
+      <div class="explain-pair">
+        <span class="lang-tag">ಕನ್ನಡದಲ್ಲಿ</span>
+        <p class="kn" id="explainKn"></p>
+        <span class="lang-tag">In plain English</span>
+        <p id="explainEn"></p>
+      </div>
+    </div>
+
+    <div class="tab-panel" data-panel="lesson" id="lifehackBox">
+      <div class="lifehack-head">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.6 10.8c.6.45.9 1.15.9 1.9V16h5.4v-.3c0-.75.3-1.45.9-1.9A6 6 0 0012 3z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>ಜೀವನ ಪಾಠ · Life Lesson</span>
+      </div>
+      <p class="kn" id="lifehackKn"></p>
+      <p id="lifehackEn"></p>
+    </div>
+
+  </div>
+
+  <nav class="verse-nav">
+    <a class="nav-btn prev glass" id="prevBtn">
+      <span class="nav-dir">← Previous</span>
+      <span class="nav-title" id="prevTitle"></span>
+    </a>
+    <a class="nav-btn next glass" id="nextBtn">
+      <span class="nav-dir">Next →</span>
+      <span class="nav-title" id="nextTitle"></span>
+    </a>
+  </nav>
+
+</div>
+
+<script src="data.js"></script>
+<script>
+  const params = new URLSearchParams(location.search);
+  let idx = parseInt(params.get('v'), 10);
+  if (isNaN(idx) || idx < 0 || idx >= GITA_DATA.length) idx = 0;
+  const v = GITA_DATA[idx];
+
+  document.title = `${v.verseRef} · ${v.chapterTitleEn} · Bhagavad Gita Journey`;
+
+  document.getElementById('crumb').textContent = `Ch ${v.chapter}/18 · ಅಧ್ಯಾಯ ${v.chapter}`;
+  document.getElementById('vnum').textContent = String(v.chapter).padStart(2,'0');
+  document.getElementById('chapterEn').textContent = v.chapterTitleEn;
+  document.getElementById('chapterKn').textContent = v.chapterTitleKn;
+  document.getElementById('verseRef').textContent = `ಶ್ಲೋಕ ${v.verseRef}`;
+  document.getElementById('chant').textContent = v.kannadaChant;
+  document.getElementById('meaningKn').textContent = v.meaningKn;
+  document.getElementById('meaningEn').textContent = v.meaningEn;
+  document.getElementById('explainKn').textContent = v.explanationKn;
+  document.getElementById('explainEn').textContent = v.explanationEn;
+
+  if (v.lifeHackKn && v.lifeHackEn) {
+    document.getElementById('lifehackKn').textContent = v.lifeHackKn;
+    document.getElementById('lifehackEn').textContent = v.lifeHackEn;
+  } else {
+    document.getElementById('lifehackBox').innerHTML =
+      '<div class="lifehack-head"><span>ಜೀವನ ಪಾಠ · Life Lesson</span></div><p class="no-lifehack">This verse sets the scene — the lesson builds as the story continues.</p>';
+  }
+
+  // progress dots
+  const progressRow = document.getElementById('progressRow');
+  GITA_DATA.forEach((_, i) => {
+    const d = document.createElement('span');
+    d.className = 'dot' + (i === idx ? ' is-active' : (i < idx ? ' is-done' : ''));
+    progressRow.appendChild(d);
+  });
+
+  // prev / next
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  if (idx > 0) {
+    const p = GITA_DATA[idx - 1];
+    prevBtn.href = `shloka.html?v=${idx - 1}`;
+    document.getElementById('prevTitle').textContent = p.chapterTitleEn;
+  } else {
+    prevBtn.classList.add('disabled');
+    document.getElementById('prevTitle').textContent = '—';
+  }
+
+  if (idx < GITA_DATA.length - 1) {
+    const n = GITA_DATA[idx + 1];
+    nextBtn.href = `shloka.html?v=${idx + 1}`;
+    document.getElementById('nextTitle').textContent = n.chapterTitleEn;
+  } else {
+    nextBtn.classList.add('disabled');
+    document.getElementById('nextTitle').textContent = 'Journey Complete';
+  }
+
+  // segmented tabs with sliding glass indicator
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabPanels = document.querySelectorAll('.tab-panel');
+  const indicator = document.getElementById('tabIndicator');
+
+  function moveIndicator(btn){
+    indicator.style.transform = `translateX(${btn.offsetLeft - 4}px)`;
+    indicator.style.width = btn.offsetWidth + 'px';
+  }
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabBtns.forEach(b => b.classList.remove('is-active'));
+      tabPanels.forEach(p => p.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      document.querySelector(`.tab-panel[data-panel="${btn.dataset.tab}"]`).classList.add('is-active');
+      moveIndicator(btn);
+      document.querySelector('.tab-panels').scrollTop = 0;
+    });
+  });
+
+  window.addEventListener('load', () => moveIndicator(document.querySelector('.tab-btn.is-active')));
+  window.addEventListener('resize', () => moveIndicator(document.querySelector('.tab-btn.is-active')));
+</script>
+</body>
+</html>
